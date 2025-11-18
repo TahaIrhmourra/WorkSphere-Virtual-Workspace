@@ -2,6 +2,7 @@
 const fullName = document.querySelector("#full-name");
 const roles = document.querySelector("#roles");
 const profilePic = document.querySelector("#profile-picture");
+const perVisualImage = document.querySelector("#img-visual");
 const email = document.querySelector("#email");
 const phoneNumber = document.querySelector("#telephone");
 // Experience
@@ -10,17 +11,17 @@ const experiencePosition = document.querySelector("#experience-position");
 const startDate = document.querySelector("#date-debut");
 const finishDate = document.querySelector("#date-fin");
 // Buttons
+const addImages = document.querySelector("#add-image");
 const addExperience = document.querySelector("#add-experience");
 const addNewExperience = document.querySelector("#nouvelle-experience");
 const submitBtn = document.querySelector("#submit-button");
+const exitBtns = document.querySelectorAll(".exit1");
 // Experience Display
 const addedExperieces = document.querySelector("#added-experiences");
 const experienceForm = document.querySelector(".experience");
 
 // Retriving Data from local
 const storedEmployees = JSON.parse(localStorage.getItem('Employees')) || [];
-console.log(storedEmployees);
-
 
 // Array to hold each object of experiences
 let experiences = [];
@@ -31,11 +32,13 @@ if (experiences.length === 0) {
     addedExperieces.classList.add("hidden"); 
 }
 
+// Add a new experience
 addNewExperience.addEventListener('click', () => {
     addNewExperience.classList.add("hidden");
     experienceForm.classList.remove("hidden");
 })
 
+// Add an experiece
 addExperience.addEventListener('click', () => {
     // each experience object
     const experience = {
@@ -71,13 +74,30 @@ addExperience.addEventListener('click', () => {
     addNewExperience.classList.remove("hidden");
 })
 
+let imagePath = null;
+addImages.addEventListener('click', () => {
+    // create img
+    const image = document.createElement("img");
+    image.classList.add("w-full", "h-full");
+    image.src = profilePic.value
+    perVisualImage.appendChild(image);
+    perVisualImage.classList.remove("hidden");
+    // sending img to the main obj
+
+    document.querySelector("#valid-img").addEventListener('click', () => {
+        imagePath = profilePic.value;
+        perVisualImage.classList.add("hidden");
+    })
+})
+
+// Submit the full object containing the img, experiences and other informations
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
     const employee = {
         employeeName: fullName.value,
         employeeRole: roles.value,
-        employeePic: profilePic.value,
+        employeePic: imagePath,
         employeeEmail: email.value,
         employeePhoneNumber: phoneNumber.value,
         employeeExperiences: experiences
@@ -96,5 +116,13 @@ submitBtn.addEventListener('click', (e) => {
     experiencePosition.value = '';
     startDate.value = '';
     finishDate.value = '';
+    imagePath = null;
     experiences = [];
 });
+
+exitBtns.forEach(btn => btn.addEventListener('click', () => exit(btn.parentElement)));
+
+function exit(element) {
+    element.classList.remove("flex");
+    element.classList.add("hidden");
+}

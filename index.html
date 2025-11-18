@@ -31,7 +31,8 @@
         </select>
         <!-- Photo -->
         <label for="profile-picture" class="text-soft-white">Upload your picture</label>
-        <input type="file" id="profile-picture" class="w-full px-4 py-2">
+        <input type="text" id="profile-picture" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Paste the image url">
+        <input type="button" id="add-image" class="bg-teal ml-[auto] text-soft-white text-base cursor-pointer w-fit rounded-3xl px-4 py-3" value="Add Image">
         <!-- Email -->
         <label for="email" class="text-soft-white">Email</label>
         <input type="email" id="email" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Example@gg.com">
@@ -65,6 +66,12 @@
         <!-- Final Submit -->
         <input type="submit" id="submit-button" class="bg-teal mt-3 text-soft-white text-xl cursor-pointer w-fit rounded-3xl px-4 py-3" value="Confirmer">
     </form>
+
+    <!-- Image Pre visual -->
+    <div id="img-visual" class="hidden bg-dark-black w-[75%] h-[50%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-4 border-teal overflow-hidden">
+        <button id="valid-img" class="absolute right-6 bottom-6 text-2xl font-momo-trust text-soft-white font-bold"> &#10004</button>
+        <button class="exit1 absolute right-6 top-6 text-2xl font-momo-trust text-soft-white font-bold">X</button>
+    </div>
 
     <!-- Script -->
     <script src="./src/index.js"></script>

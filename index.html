@@ -14,10 +14,10 @@
 <body>
     
     <!-- Formulaire -->
-    <form action="" class="absolute overflow-y-auto left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col items-center bg-grey w-[90vw] h-[75vh] px-5 py-7 rounded-3xl text-dark-black font-momo-trust gap-3 caret-dark-black">
+    <form action="" class="absolute overflow-y-auto left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col items-center bg-grey w-[90vw] h-[75vh] px-5 py-7 rounded-3xl text-dark-black font-momo-trust gap-4 caret-dark-black">
         <!-- Name -->
-        <label for="name" class="text-soft-white">Full Name</label>
-        <input type="text" id="name" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Eren Yeager" autofocus>
+        <label for="full-name" class="text-soft-white">Full Name</label>
+        <input type="text" id="full-name" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Eren Yeager" autofocus>
         <!-- Role -->
         <label for="roles" class="text-soft-white">Roles</label>
         <select id="roles" class="w-full rounded-3xl px-4 py-2 border-none outline-none">
@@ -38,14 +38,19 @@
         <!-- Telephone -->
         <label for="telephone" class="text-soft-white">Téléphone</label>
         <input type="tel" id="telephone" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="0612345678">
-        <!-- Experience -->
+        <!-- Adding Experiences -->
+        <div id="added-experiences" class="flex flex-col items-center gap-3 border-2 border-[#b9b9b9] p-6 rounded-xl mt-3 w-full">
+            <span class="text-soft-white">Experiences</span>
+        </div>
+        <!-- Added Experiences -->    
         <div class="experience flex flex-col items-center gap-3 w-full border-2 border-[#b9b9b9] p-6 rounded-xl mt-3">
-             <!-- Experience name -->
+            <!-- Adding Experiences -->
+            <!-- Experience name -->
             <label for="experience-name" class="text-soft-white">Nom de l'employeur</label>
             <input type="text" id="experience-name" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Marjane">
              <!-- Experience position -->
-            <label for="position" class="text-soft-white">Position</label>
-            <input type="text" id="position" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Manager">
+            <label for="experience-position" class="text-soft-white">Position</label>
+            <input type="text" id="experience-position" class="w-full rounded-3xl px-4 py-2 border-none outline-none" placeholder="Manager">
             <!-- Date Debut -->
             <label for="date-debut" class="text-soft-white">Date De Debut</label>
             <input type="date" id="date-debut" class="w-full rounded-3xl px-4 py-2 border-none outline-none">
@@ -53,12 +58,12 @@
             <label for="date-fin" class="text-soft-white">Date De Fin</label>
             <input type="date" id="date-fin" class="w-full rounded-3xl px-4 py-2 border-none outline-none">
             <!-- Submit -->
-            <input type="button" class="bg-teal mt-3 text-soft-white text-xl cursor-pointer w-full rounded-3xl px-4 py-3" value="Add">
+            <input type="button" class="bg-teal mt-3 text-soft-white text-xl cursor-pointer w-full rounded-3xl px-4 py-3" id="add-experience" value="Add">
         </div>
         <!-- Nouvelle Exerience -->
-        <input type="button" class="bg-teal mt-3 text-soft-white text-base cursor-pointer w-full rounded-3xl px-4 py-3" value="Ajouter une nouvelle experience">
+        <input type="button" class="hidden bg-teal mt-3 text-soft-white text-base cursor-pointer w-full rounded-3xl px-4 py-3" id="nouvelle-experience" value="Ajouter une nouvelle experience">
         <!-- Final Submit -->
-        <input type="submit" class="bg-teal mt-3 text-soft-white text-xl cursor-pointer w-full rounded-3xl px-4 py-3" value="Confirmer">
+        <input type="submit" id="submit-button" class="bg-teal mt-3 text-soft-white text-xl cursor-pointer w-fit rounded-3xl px-4 py-3" value="Confirmer">
     </form>
 
     <!-- Script -->

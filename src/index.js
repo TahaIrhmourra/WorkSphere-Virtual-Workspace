@@ -1,3 +1,5 @@
+// Elements
+const form = document.querySelector("#form");
 // Infos
 const fullName = document.querySelector("#full-name");
 const roles = document.querySelector("#roles");
@@ -15,13 +17,36 @@ const addImages = document.querySelector("#add-image");
 const addExperience = document.querySelector("#add-experience");
 const addNewExperience = document.querySelector("#nouvelle-experience");
 const submitBtn = document.querySelector("#submit-button");
-const exitBtns = document.querySelectorAll(".exit1");
-// Experience Display
+const exitBtns = document.querySelectorAll(".exit1, .exit2");
+const minimizeBtns = document.querySelectorAll(".minimize1");
+const openBtns = document.querySelectorAll(".open1");
+const addEmployee = document.querySelector("#add-employe");
+// Display element
 const addedExperieces = document.querySelector("#added-experiences");
 const experienceForm = document.querySelector(".experience");
+const sideBar = document.querySelector(".sibe-bar");
+const profilesWrapper = document.querySelector(".profiles-wrapper");
 
-// Retriving Data from local
+
+// Retriving Data from local adding it to unssigned list
 const storedEmployees = JSON.parse(localStorage.getItem('Employees')) || [];
+let unssignedEmp = [];
+storedEmployees.forEach(emp => {
+    unssignedEmp.push(emp);   
+})
+
+// Displaying unssignedEmps
+unssignedEmp.forEach(emp => {
+    profilesWrapper.innerHTML += `
+        <div class="box p-2 flex items-center gap-3 border-2 border-[#b9b9b9] rounded-3xl cursor-pointer">
+            <img src="${emp.employeePic}" alt="imployee-image" class="border-2 border-[#b9b9b9] rounded-[15px] w-16 h-16">
+            <div class="text-soft-white">
+                <h2 class="text-2xl">${emp.employeeName}</h2>
+                <p class="text-sm w-fit ml-3 opacity-70">${emp.employeeRole}</p>
+            </div>
+        </div>
+    `
+})
 
 // Array to hold each object of experiences
 let experiences = [];
@@ -67,6 +92,7 @@ addExperience.addEventListener('click', () => {
         </div>
     `
     addedExperieces.innerHTML += experieceBox;
+    addedExperieces.style.display = 'flex';
 
     addedExperieces.classList.remove("hidden"); 
     addedExperieces.classList.add("flex");
@@ -118,11 +144,30 @@ submitBtn.addEventListener('click', (e) => {
     finishDate.value = '';
     imagePath = null;
     experiences = [];
+    addedExperieces.innerHTML = "";
+    addedExperieces.style.display = 'none';
 });
 
+// Functionality
 exitBtns.forEach(btn => btn.addEventListener('click', () => exit(btn.parentElement)));
+minimizeBtns.forEach(btn => btn.addEventListener('click', () => minimize(btn.parentElement)));
+openBtns.forEach(btn => btn.addEventListener('click', () => open(sideBar)));
+addEmployee.addEventListener('click', () => {open2(form); minimize(sideBar)});
 
+// Functions
 function exit(element) {
     element.classList.remove("flex");
     element.classList.add("hidden");
+}
+function minimize(element) {
+    element.classList.remove("left-0");
+    element.classList.add("left-[-100%]");
+}
+function open(element) {
+    element.classList.remove("left-[-100%]");
+    element.classList.add("left-0");
+}
+function open2(element) {
+    element.classList.remove("hidden");
+    element.classList.add("flex");
 }

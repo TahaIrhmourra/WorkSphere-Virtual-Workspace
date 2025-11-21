@@ -11,7 +11,16 @@
     fontFamily: {
       'momo-trust': ["Momo Trust Display", 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        13: 'repeat(13, minmax(0, 1fr))',
+      },
+      gridColumnEnd: {
+        14: '14'
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

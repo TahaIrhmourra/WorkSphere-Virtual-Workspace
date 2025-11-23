@@ -16,6 +16,7 @@
 <body class="bg-dark-black">
     <!-- Formulaire -->
     <form action="" id="form" class="hidden absolute overflow-y-auto left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] flex-col items-center bg-grey w-[90vw] h-[75vh] px-5 py-7 rounded-3xl text-dark-black font-momo-trust gap-4 caret-dark-black z-30 scrollbar-none">
+        <!-- Exit btn -->
         <button type="button" class="exit2 relative w-fit ml-auto text-end text-2xl font-momo-trust text-soft-white font-bold mt-[-15px] mr-[-5px]">
             <i class="fa-solid fa-right-from-bracket"></i>
         </button>
@@ -77,6 +78,14 @@
         <button class="exit1 absolute right-6 top-6 text-2xl font-momo-trust text-soft-white font-bold">X</button>
     </div>
 
+    <!-- Employe Profile -->
+    <div id="emp-profile" class="hidden absolute overflow-y-auto left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] bg-grey w-[90vw] h-[75vh] px-5 py-7 rounded-3xl text-dark-black font-momo-trust caret-dark-black z-30 scrollbar-none">
+        <button type="button" class="exit2 relative w-full ml-auto text-end text-2xl font-momo-trust text-soft-white font-bold mt-[-15px] mr-[-5px]">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+        <div id="profiles-wrapper" class="w-full flex flex-col items-center gap-4"></div>
+    </div>
+
     <!-- Page content -->
     <main class="relative">
         <!-- Side bar-open -->
@@ -86,8 +95,8 @@
         <!-- Sidebar --> 
         <div class="sibe-bar absolute bg-dark-black h-[100vh] w-full left-[-100%] text-center duration-300 z-50">
             <!-- Close sidebar -->
-            <button class="minimize1 relative w-full top-3 right-6 text-end text-2xl font-momo-trust text-soft-white font-bold">X</button>
-            <h2 class="font-momo-trust text-soft-white text-2xl mt-6 mb-5">Liste des employes</h2>
+            <button class="minimize1 absolute w-full top-3 right-6 text-end text-2xl font-momo-trust text-soft-white font-bold">X</button>
+            <h2 class="font-momo-trust text-soft-white text-2xl mb-5 mt-[75px]">Liste des employes</h2>
             <!-- Adding button -->
             <input id="add-employe" type="button" value="Ajouter" class="text-2xl text-soft-white border-2 px-5 py-2 rounded-3xl font-momo-trust cursor-pointer">
             <!-- Profiles container -->
@@ -97,15 +106,24 @@
         <div class="plan pt-[45px]">
             <div class="plan-wrapper relative w-full h-[300px] md:h-[450px] lg:h-[75vh] xl:h-[85vh] p-2 grid grid-cols-13 grid-rows-12">
                 <!-- Rooms -->
-                <div class="conference-room col-start-1 col-end-6 row-start-1 row-end-5 -ml-[5px] relative p-[3px] overflow-hidden">
+                <div class="conference-room col-start-1 col-end-6 row-start-1 row-end-5 -ml-[5px] relative p-[3px] overflow-hidden" data-room="conference">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[5px] right-[5px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[6px] md:top-[12px] lg:top-[16px] w-full justify-center items-center">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Salle de conference</span>
                             <div id="counter-conference" class= "text-soft-white text-[10px] md:text-[14px]">0/6</div>
                         </div>
+                        <div class="employees-wrapper mx-auto w-full gap-2 justify-center text-center p-5 flex flex-wrap"></div>
                     </div>
                 </div>
-                <div class="reception col-start-1 col-end-6 row-start-5 row-end-13 relative p-[3px] -ml-[5px] overflow-hidden">
+                <div class="reception col-start-1 col-end-6 row-start-5 row-end-13 relative p-[3px] -ml-[5px] overflow-hidden" data-room="reception">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[10px] right-[8px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[3px] md:top-[12px] lg:top-[16px] w-full justify-center items-center">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Reception</span>
@@ -113,7 +131,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="server-room col-start-8 col-end-11 row-start-1 row-end-5 relative top-[3px] p-[2px] -mr-1 overflow-hidden">
+                <div class="server-room col-start-8 col-end-11 row-start-1 row-end-5 relative top-[3px] p-[2px] -mr-1 overflow-hidden" data-room="server">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[5px] right-[8px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[3px] md:top-[12px] lg:top-[16px] w-full justify-center items-center px-2 ml-[-2.5px]">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Salle des serveurs</span>
@@ -121,7 +143,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="security-room col-start-11 col-end-14 row-start-1 row-end-5 relative top-[3px] p-[2px] -mr-1 overflow-hidden">
+                <div class="security-room col-start-11 col-end-14 row-start-1 row-end-5 relative top-[3px] p-[2px] -mr-1 overflow-hidden" data-room="security">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[5px] right-[10px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[3px] md:top-[12px] lg:top-[16px] w-full justify-center items-center px-2 ml-[-2.5px]">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Salle de securite</span>
@@ -129,7 +155,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="staff-room col-start-8 col-end-11 row-start-9 row-end-13 relative p-[2px] -mr-1 overflow-hidden">
+                <div class="staff-room col-start-8 col-end-11 row-start-9 row-end-13 relative p-[2px] -mr-1 overflow-hidden" data-room="staff">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[5px] right-[8px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[3px] md:top-[12px] lg:top-[16px] w-full justify-center items-center px-2 ml-[-2.5px]">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Salle du personnel</span>
@@ -137,7 +167,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="archive-room col-start-11 col-end-14 row-start-9 row-end-13 relative p-[2px] -mr-1 overflow-hidden">
+                <div class="archive-room col-start-11 col-end-14 row-start-9 row-end-13 relative p-[2px] -mr-1 overflow-hidden" data-room="archive">
+                    <!-- Open button -->
+                    <div class="open-list absolute bottom-[10px] right-[10px] text-soft-white text-xs cursor-pointer hover:bg-dark-black duration-300 rounded-full">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
                     <div class="w-full h-full bg-teal bg-opacity-30">
                         <div class="info absolute flex gap-3 top-[3px] md:top-[12px] lg:top-[16px] w-full justify-center items-center px-2 ml-[-2.5px]">
                             <span class="room-name text-soft-white text-[10px] md:text-[14px]">Salle d'archives</span>

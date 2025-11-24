@@ -17,7 +17,7 @@ const addImages = document.querySelector("#add-image");
 const addExperience = document.querySelector("#add-experience");
 const addNewExperience = document.querySelector("#nouvelle-experience");
 const submitBtn = document.querySelector("#submit-button");
-const exitBtns = document.querySelectorAll(".exit1, .exit2");
+const exitBtns = document.querySelectorAll(".exit1, .exit2, .exit3");
 const minimizeBtns = document.querySelectorAll(".minimize1");
 const openBtns = document.querySelectorAll(".open1");
 const addEmployee = document.querySelector("#add-employe");
@@ -51,42 +51,59 @@ addNewExperience.addEventListener('click', () => {
 
 // Add an experiece
 addExperience.addEventListener('click', () => {
-    // each experience object
-    const experience = {
-        employerName: experienceName.value,
-        jobPosition: experiencePosition.value,
-        dateOfStart: startDate.value,
-        dateOfFinish: finishDate.value
-    }   
-    
-    experienceName.value = '';
-    experiencePosition.value = '';
-    startDate.value = '';
-    finishDate.value = '';
+    let valid = {
+        expName: /^[a-zA-Z ]{1,16}$/.test(experienceName.value),
+        expPositon: /^[a-zA-Z ]{1,16}$/.test(experiencePosition.value)
+    }
 
-    let sDate = Number(experience.dateOfStart.slice(0, 4));
-    let fDate = Number(experience.dateOfFinish.slice(0, 4));
-    if (fDate < sDate) return;
+    let val = Object.values(valid).every(rule => rule === true);
 
-    experiences.push(experience);
-    
-    let experieceBox = `
-        <div class="exprerience text-soft-white border-2 border-[#b9b9b9] rounded-xl p-3 w-[90%] text-center">
-            <h1>${experience.employerName}</h1>
-            <h2>${experience.jobPosition}</h2>
-            <div>From ${sDate} To ${fDate}</div>
-        </div>
-    `
-    addedExperieces.innerHTML += experieceBox;
-    addedExperieces.classList.add("flex");
+    if (val) {
+        // each experience object
+        const experience = {
+            employerName: experienceName.value,
+            jobPosition: experiencePosition.value,
+            dateOfStart: startDate.value,
+            dateOfFinish: finishDate.value
+        }   
+        
+        experienceName.value = '';
+        experiencePosition.value = '';
+        startDate.value = '';
+        finishDate.value = '';
 
-    addedExperieces.classList.remove("hidden"); 
-    addedExperieces.classList.add("flex");
-    experienceForm.classList.add("hidden");
-    addNewExperience.classList.remove("hidden");
+        let sDate = Number(experience.dateOfStart.slice(0, 4));
+        let fDate = Number(experience.dateOfFinish.slice(0, 4));
+        if (fDate < sDate) return;
+
+        experiences.push(experience);
+        
+        let experieceBox = `
+            <div class="exprerience text-soft-white border-2 border-[#b9b9b9] rounded-xl p-3 w-[90%] text-center">
+                <h1>${experience.employerName}</h1>
+                <h2>${experience.jobPosition}</h2>
+                <div>From ${sDate} To ${fDate}</div>
+            </div>
+        `
+        addedExperieces.innerHTML += experieceBox;
+        addedExperieces.classList.add("flex");
+
+        addedExperieces.classList.remove("hidden"); 
+        addedExperieces.classList.add("flex");
+        experienceForm.classList.add("hidden");
+        addNewExperience.classList.remove("hidden");
+    } else {
+        if (valid.expName === false) {
+            alert("Le nom de l'employeur ne peut pas etre vide");
+        }
+        if (valid.expPositon === false) {
+            alert("La position ne peut pas etre vide");
+        }
+    }
 })
 
-let imagePath = null;
+// Adding img
+let imagePath = '';
 addImages.addEventListener('click', () => {
     if (perVisualImage.querySelector("img")) {
         perVisualImage.querySelector("img").remove();
@@ -107,42 +124,68 @@ addImages.addEventListener('click', () => {
     }
 })
 
-// Submit the full object containing the img, experiences and other informations
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    const employee = {
-        employeeId: ++currentId,
-        employeeName: fullName.value,
-        employeeRole: roles.value,
-        employeePic: imagePath,
-        employeeEmail: email.value,
-        employeePhoneNumber: phoneNumber.value,
-        employeeExperiences: experiences
+    let valid = {
+        empName: /^[a-zA-Z ]{8,24}$/.test(fullName.value),
+        empRole: roles.value !== '',
+        empPic: imagePath !== '',
+        empEmail: /^[a-zA-Z.]+@[a-zA-Z.]+\.(com|fr|net|org)$/.test(email.value),
+        empPhoneNum: /^06\d{8}$/.test(phoneNumber.value),
     }
 
-    storedEmployees.push(employee);
-    localStorage.setItem('Employees', JSON.stringify(storedEmployees));
-    localStorage.setItem('currentId', JSON.stringify(currentId));
-    profilesWrapper.innerHTML = '';
-    updateUsers();
+    val = Object.values(valid).every(rule => rule === true);
+    if (val === true) {
+        const employee = {
+            employeeId: ++currentId,
+            employeeName: fullName.value,
+            employeeRole: roles.value,
+            employeePic: imagePath,
+            employeeEmail: email.value,
+            employeePhoneNumber: phoneNumber.value,
+            employeeExperiences: experiences
+        }
     
-    // empty values 
-    fullName.value = "";
-    roles.value = "";
-    profilePic.value = "";
-    email.value = "";
-    phoneNumber.value = "";
-    experienceName.value = '';
-    experiencePosition.value = '';
-    startDate.value = '';
-    finishDate.value = '';
-    imagePath = '';
-    experiences = [];
-    addedExperieces.innerHTML = "";
-    addedExperieces.style.display = 'none';
-
-    exit(form);
+        storedEmployees.push(employee);
+        localStorage.setItem('Employees', JSON.stringify(storedEmployees));
+        localStorage.setItem('currentId', JSON.stringify(currentId));
+        profilesWrapper.innerHTML = '';
+        updateUsers();
+        
+        // empty values 
+        fullName.value = "";
+        roles.value = "";
+        profilePic.value = "";
+        email.value = "";
+        phoneNumber.value = "";
+        experienceName.value = '';
+        experiencePosition.value = '';
+        startDate.value = '';
+        finishDate.value = '';
+        imagePath = '';
+        experiences = [];
+        addedExperieces.innerHTML = "";
+        addedExperieces.style.display = 'none';
+    
+        exit(form);
+    } else {
+        if (valid.empName === false) {
+            alert("Ton nom ne doit contenir que des lettres majuscules, minuscules et des espaces");
+        }
+        if (valid.empRole === false) {
+            alert("Veuillez choisir un role");
+        }
+        if (valid.empPic === false) {
+            imagePath = 'https://kittyinpink.co.uk/wp-content/uploads/2016/12/facebook-default-photo-male_1-1.jpg';
+        }
+        if (valid.empEmail === false) {
+            alert("Assurez-vous que votre email contient '@' et '.'");
+        }
+        if (valid.empPhoneNum === false) {
+            alert("Assurez-vous que votre numero de tel commence par 06 et comporte un total de 10 chiffres (y compris le 06)");
+        }
+    }
 });
 
 // open profile
@@ -172,11 +215,11 @@ profilesWrapper.addEventListener('click', (e) => {
             ${empExperiences.map(exp => {
                 return `
                     <div class="border-2 border-[#b9b9b9] rounded-2xl p-4">
-                        <p>Chez: <span class="text-teal">${exp.employerName}</span></p>            
+                        <p>Chez: <span class="text-teal"><span>${exp.employerName}</span></p>            
                         <p>Position: <span class="text-teal">${exp.jobPosition}</span></p>
                         <p class="text-teal max-w-[150px] m-auto">
-                        <span class="text-soft-white">De</span> ${exp.dateOfStart}
-                        <span class="text-soft-white">A</span> ${exp.dateOfFinish}
+                        <span class="text-soft-white font-momo-trust">De</span> ${exp.dateOfStart}
+                        <span class="text-soft-white font-momo-trust">A</span> ${exp.dateOfFinish}
                         </p>
                     </div>
                 `
@@ -233,8 +276,6 @@ function updateUsers() {
         `
     })
 }
-
-// function openProfile() {}
 
 {/* <div class="box w-6 h-6 overflow-hidden rounded-full cursor-pointer border border-soft-white duration-300 hover:border-dark-black">
 <img src="https://intranet.youcode.ma/storage/users/profile/1774-1760996459.png" alt="img-profile" class="w-full h-full hover:scale-125 duration-300">

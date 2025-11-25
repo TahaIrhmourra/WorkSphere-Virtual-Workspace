@@ -27,11 +27,13 @@ const addedExperieces = document.querySelector("#added-experiences");
 const experienceForm = document.querySelector(".experience");
 const sideBar = document.querySelector(".sibe-bar");
 const profilesWrapper = document.querySelector(".profiles-wrapper");
+const displayEmployees = document.querySelector("#display-Emp");
 
 // Array to hold each object of experiences
 let experiences = [];
 // Store employees
 const storedEmployees = JSON.parse(localStorage.getItem('Employees')) || [];
+let movedEmp = [];
 let currentId = JSON.parse(localStorage.getItem('currentId'));
 
 // update Users
@@ -124,6 +126,7 @@ addImages.addEventListener('click', () => {
     }
 })
 
+// submit btn
 submitBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -131,7 +134,7 @@ submitBtn.addEventListener('click', (e) => {
         empName: /^[a-zA-Z ]{8,24}$/.test(fullName.value),
         empRole: roles.value !== '',
         empPic: imagePath !== '',
-        empEmail: /^[a-zA-Z.]+@[a-zA-Z.]+\.(com|fr|net|org)$/.test(email.value),
+        empEmail: /^[a-zA-Z0-9-_]+@[a-zA-Z]+\.(com|fr|net|org)$/.test(email.value),
         empPhoneNum: /^06\d{8}$/.test(phoneNumber.value),
     }
 
@@ -190,7 +193,6 @@ submitBtn.addEventListener('click', (e) => {
 
 // open profile
 const empProfileDisplay = document.querySelector("#emp-profile");
-
 profilesWrapper.addEventListener('click', (e) => {
     const box = e.target.closest(".box");
 
@@ -224,20 +226,91 @@ profilesWrapper.addEventListener('click', (e) => {
                     </div>
                 `
             }).join('')}
-        
     </div> 
     `
-
     empProfileDisplay.classList.remove("hidden");
 })
 
-// openListBtns.forEach(btn => btn.addEventListener('click', (e) => {
-//     const currentRoom = e.currentTarget.parentElement.dataset.room;
-//     const eligibleEmps = storedEmployees.filter(emp => emp.employeeRole === currentRoom) 
-//     console.log(eligibleEmps)
-//     // if (currentRoom.classList.contains("conference-room")) console.log("yes")
-// }))
+// add employee into a room
+openListBtns.forEach(btn => btn.addEventListener('click', (e) => {
+    const currentRoom = e.currentTarget.parentElement;
+    
+    let room = {
+        roomId: currentRoom.id,
+        roomName: currentRoom.dataset.room,
+        roomCapacity: currentRoom.dataset.capacity,
+        allowed: currentRoom.dataset.allowed.split(","),
+        currentEmployees: [],
+    }
 
+    const allowedEmp = storedEmployees.filter(emp => room.allowed.includes(emp.employeeRole))
+
+    if (allowedEmp.length === 0) {
+        alert("Aucun employe disponible, ajoutez-en")
+    } else {
+        displayEmployees.classList.remove("hidden");
+        displayEmployees.classList.add("flex");
+        allowedEmp.forEach(emp => {
+            displayEmployees.innerHTML += `
+                <div id=${emp.employeeId} class="box p-2 flex items-center gap-3 border-2 border-[#b9b9b9] rounded-3xl cursor-pointer w-full">
+                    <img src="${emp.employeePic}" alt="imployee-image" class="border-2 border-[#b9b9b9] rounded-[15px] w-16 h-16">
+                    <div class="text-soft-white">
+                        <h2 class="text-2xl">${emp.employeeName}</h2>
+                        <p class="text-sm w-fit ml-3 opacity-70">${emp.employeeRole}</p>
+                    </div>
+                </div>
+            `
+        })
+    }
+    const employeeCards = displayEmployees.querySelectorAll(".box");
+    employeeCards.forEach(emp => emp.addEventListener('click', (e) => {
+        const selectedEmployee = e.currentTarget;
+        if (room.currentEmployees.length >= room.roomCapacity) {
+            alert("La salle est pleine")
+            return;
+        }
+        const empId = Number(selectedEmployee.id);
+        const empIndex = storedEmployees.findIndex(emp => emp.employeeId == empId);
+        const employee = storedEmployees[empIndex];
+        storedEmployees.splice(empIndex, 1);
+
+        room.currentEmployees.push(employee);
+        movedEmp.push(employee);
+
+        localStorage.setItem('Employees', JSON.stringify(storedEmployees));
+
+        selectedEmployee.remove();
+        updateUsers();
+        
+        displayEmployees.classList.remove("flex");
+        displayEmployees.classList.add("hidden");
+
+        const currentRoom = document.getElementById(room.roomId);
+        const epmWrapper = currentRoom.querySelector("#empW");
+        room.currentEmployees.forEach(emp => {
+            epmWrapper.innerHTML += `
+                <div id="${emp.employeeId}" class="box w-6 h-6 overflow-hidden rounded-full cursor-pointer border border-soft-white duration-300 hover:border-dark-black">
+                    <img src="${emp.employeePic}" alt="img-profile" class="w-full h-full hover:scale-125 duration-300">
+                </div> 
+            `
+        })
+    }))
+}))
+
+// remove employee from room 
+const empWrapper = document.querySelectorAll("#empW");
+empWrapper.forEach(wr => wr.addEventListener("click", (e) => {
+    const selectedBox = e.target.closest(".box");
+    const empId = Number(selectedBox.id);
+
+    employee = movedEmp.find(emp => emp.employeeId == empId)
+
+    storedEmployees.push(employee);
+    localStorage.setItem("Employees", JSON.stringify(storedEmployees));
+
+    selectedBox.remove();
+    updateUsers();
+}))
 
 // Functionality
 exitBtns.forEach(btn => btn.addEventListener('click', () => exit(btn.parentElement)));
@@ -262,8 +335,10 @@ function open2(element) {
     element.classList.remove("hidden");
     element.classList.add("flex");
 }
+// update users
 function updateUsers() {
     // Displaying unssignedEmps
+    profilesWrapper.innerHTML = '';
     storedEmployees.forEach(emp => {
         profilesWrapper.innerHTML += `
             <div id=${emp.employeeId} class="box p-2 flex items-center gap-3 border-2 border-[#b9b9b9] rounded-3xl cursor-pointer">
@@ -276,7 +351,3 @@ function updateUsers() {
         `
     })
 }
-
-{/* <div class="box w-6 h-6 overflow-hidden rounded-full cursor-pointer border border-soft-white duration-300 hover:border-dark-black">
-<img src="https://intranet.youcode.ma/storage/users/profile/1774-1760996459.png" alt="img-profile" class="w-full h-full hover:scale-125 duration-300">
-</div> */}
